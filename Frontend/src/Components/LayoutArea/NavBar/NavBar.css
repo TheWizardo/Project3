@@ -1,0 +1,13 @@
+.NavBar {
+    width: 100%;
+    height: 2em;
+    line-height: 2em;
+    padding-left: 0.5ch;
+    background-image: linear-gradient(3deg, transparent, rgb(180, 180, 241));
+}
+
+.NavBar .AuthMenu {
+    position: absolute;
+    top: 0;
+    right: 0.5ch;
+}

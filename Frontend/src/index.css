@@ -1,0 +1,56 @@
+@import "rsuite/dist/rsuite.css";
+/* @import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+    background-color: rgb(215, 239, 247, 0.75);
+    /* font-family: 'Merriweather', serif; */
+    font-family: 'Lato', sans-serif;
+}
+
+.tab-1 {
+    margin-left: 1ch;
+}
+
+.tab-2 {
+    margin-left: 2ch;
+}
+
+.new-lines {
+    white-space: pre-line;
+}
+
+.form-style {
+    width: 75%;
+    max-width: 700px;
+    border: 1px black solid;
+    border-radius: 10px;
+    margin: 1.25em auto 0 auto;
+    padding: 0.25em 0.7em;
+    text-align: left;
+    position: relative;
+    box-shadow: 2px 2px 5px gray;
+    height: 50%;
+}
+
+.form-style>input,
+.form-style>button {
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-style>.error-message {
+    color: red;
+    margin: 0;
+    font-size: small;
+}
+
+.vertical-center {
+    position: fixed;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}

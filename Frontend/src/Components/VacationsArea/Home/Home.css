@@ -1,0 +1,26 @@
+.Home {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.Home .pagination {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.Home .pagination>a.active-link{
+    color: rgb(45, 45, 106);
+}
+
+/* .Home .VacationCard:last-of-type {
+    border-radius: 0 0 1.5em 0;
+}
+
+.Home .VacationCard:first-of-type {
+    border-radius: 0 1.5em 0 0;
+}
+
+.Home .VacationCard:only-of-type {
+    border-radius: 0 1.5em 1.5em 0;
+} */

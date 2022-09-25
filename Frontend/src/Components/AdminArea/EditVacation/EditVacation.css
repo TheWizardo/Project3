@@ -1,0 +1,31 @@
+.EditVacation> form{
+    height: 80vh;
+    display: flex;
+    flex-direction:column;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 97%;
+}
+
+.EditVacation > form > .rs-picker {
+    text-align: center;
+    width: calc(min-content + 2em);
+    margin: 0 auto;
+}
+
+.EditVacation > form > div > img {
+    width: 100px;
+    height: 100px;
+}
+
+.EditVacation > form > div {
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+.EditVacation > a {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}

@@ -1,0 +1,62 @@
+services: 
+
+  database-service: 
+    image: mysql:5.7
+    restart: unless-stopped
+    container_name: proj3-db-container
+    ports:
+      - 3306:3306
+
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_DATABASE: project3
+      MYSQL_USER: Dorothy
+      MYSQL_PASSWORD: TheLandOfOz
+      MYSQL_ROOT_PASSWORD: TheLandOfOz
+
+    volumes:
+      # Named volume for persisting MySQL data:
+      - proj3:/var/lib/mysql
+
+      # Host volume for installing initial database:
+      # docker-entrypoint-initdb.d is a special foder for running initial scripts
+      - ./Database:/docker-entrypoint-initdb.d
+
+# -------------------------------------------------
+
+  backend-service: 
+
+    image: proj3-backend:1.0
+
+    build: ./Backend
+
+    container_name: proj3-back-container
+
+    restart: unless-stopped
+
+    ports: 
+      - 3002:3001 # host:container
+
+    environment:
+      PORT: 3001
+      MYSQL_HOST: proj3-db-container # Service name becomes a network computer name
+      MYSQL_DATABASE: project3
+      MYSQL_USER: Dorothy
+      MYSQL_PASSWORD: TheLandOfOz
+
+    command: npm start
+
+    # List of our volumes:
+    volumes:
+
+      # Host Volume for nodemon inside the container:
+      - ./Backend:/app
+
+    depends_on:
+      - database-service
+
+
+# Must list the named volumes for Docker:
+volumes:
+  proj3:
+

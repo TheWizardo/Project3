@@ -1,0 +1,15 @@
+.Login {
+}
+
+.Login>form>p {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.Login hr {
+    border-color: black;
+}
+
+/* .Login>form>hr, .Login>form>button {
+    margin: 10px 0;
+} */
