@@ -147,7 +147,7 @@ async function followVacation(action: FollowAction): Promise<FollowAction> {
     return action;
 }
 
-async function AddAndReplaceImage(vacation: VacationModel = null, id: number = null): Promise<void> {
+async function AddAndReplaceImage(vacation?: VacationModel, id?: number): Promise<void> {
     let oldImageName = "PlaceholderThatWillNeverBeAnActualName.txt";
     // getting the old image name by the id
     if (vacation?.id || id) {
