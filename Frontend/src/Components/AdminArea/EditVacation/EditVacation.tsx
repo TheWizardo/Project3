@@ -139,7 +139,7 @@ function EditVacation(): JSX.Element {
 
                     <input type="text" hidden value={vacation.imageName} {...register("imageName")} />
                     <input type="number" hidden value={vacation.id} {...register("id")} />
-                    <input type="number" hidden value={vacation.following} {...register("following")} />
+                    <input type="number" hidden value={vacation.followersCount} {...register("followersCount")} />
                 </>}
                 <button disabled={vacationChanged}>Update</button>
             </form>

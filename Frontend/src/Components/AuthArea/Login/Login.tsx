@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import CredentialsModel from "../../../Models/CredentialsModel";
 import authService from "../../../Services/AuthService";
 import notifyService from "../../../Services/NotifyService";
-import vacationsService from "../../../Services/VacationsService";
 import "./Login.css";
 
 function Login(): JSX.Element {
@@ -16,7 +15,6 @@ function Login(): JSX.Element {
         try {
             await authService.login(cred); // bugs out when incorrect data is provided
             notifyService.success("Welcome back m8!");
-            await vacationsService.getMyVacations();
             navigate("/vacations");
         }
         catch (err: any) {

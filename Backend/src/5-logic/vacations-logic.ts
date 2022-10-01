@@ -25,8 +25,9 @@ async function getAllVacations(authHeader: string): Promise<VacationModel[]> {
                       FROM vacations AS V
                       JOIN destinations AS D ON D.destinationID = V.destinationID
                       LEFT JOIN followers AS F ON V.vacationID = F.vacationID
-                      GROUP BY V.vacationID;`;
+                      GROUP BY V.vacationID`;
     const vacations = await dal.execute(sqlQuery, uId);
+    vacations.map(v => v.isFollowed = v.isFollowed ? true : false);
     return vacations;
 }
 
@@ -54,30 +55,10 @@ async function getVacationById(authHeader: string, vId: number): Promise<Vacatio
     if (vacations.length < 1) {
         throw new IdNotFound(vId);
     }
-    return vacations[0];
+    const vacation = vacations[0];
+    vacation.isFollowed = vacation.isFollowed ? true : false;
+    return vacation;
 }
-
-// async function getVacationsByUser(authHeader: string): Promise<VacationModel[]> {
-//     // getting the user from the provided Token
-//     const userId = await auth.getUserIDFromToken(authHeader);
-//     const sqlQuery = `SELECT 
-//                         V.vacationID AS id,
-//                         vacationImgPath AS imageName,
-//                         startDate,
-//                         endDate,
-//                         vacationPrice AS price,
-//                         V.destinationID AS dstId,
-//                         destinationName AS dstName,
-//                         destinationDescription AS dstDescription,
-//                         COUNT(F.userID) AS following
-//                       FROM vacations AS V
-//                       JOIN destinations AS D ON V.destinationID = D.destinationID
-//                       LEFT JOIN followers AS F ON V.vacationID = F.vacationID
-//                       WHERE F.userID = ?
-//                       GROUP BY V.vacationID`;
-//     const vacations = await dal.execute(sqlQuery, userId);
-//     return vacations;
-// }
 
 async function addVacation(vacation: VacationModel): Promise<VacationModel> {
     // validating the provided vacation

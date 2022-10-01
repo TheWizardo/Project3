@@ -22,17 +22,6 @@ class VacationsService {
         return vacations;
     }
 
-    public async getMyVacations(): Promise<VacationModel[]> {
-        const response = await axios.get<VacationModel[]>(`${config.vacationsURL}/my-vacations`);
-        const vacations = response.data;
-        vacations.map(v => {
-            v.startDate = new Date(v.startDate);
-            v.endDate = new Date(v.endDate);
-        });
-        const action: VacationsAction = { type: VacationsActionType.UpdateFollowing, payload: vacations };
-        vacationsStore.dispatch(action);
-        return vacations;
-    }
     public async deleteVacation(id: number): Promise<void> {
         await axios.delete(`${config.vacationsURL}/${id}`);
         const action: VacationsAction = { type: VacationsActionType.DeleteVacation, payload: id };
@@ -73,7 +62,8 @@ class VacationsService {
     public async updateVacation(vacation: VacationModel): Promise<void> {
         const formData = new FormData();
         formData.append("id", vacation.id.toString());
-        formData.append("following", vacation.following.toString());
+        formData.append("followersCount", vacation.followersCount.toString());
+        formData.append("isFollowed", vacation.isFollowed.toString());
         formData.append("dstName", vacation.dstName);
         formData.append("dstDescription", vacation.dstDescription);
         formData.append("dstId", vacation.dstId.toString());
@@ -129,18 +119,10 @@ class VacationsService {
                 vacations = this.sortBy(vacations, VacationsSortBy.longestFirst).reverse();
                 break;
             case VacationsSortBy.myVacationsFirst:
-                const following = vacationsStore.getState().following;
-                const valid = this.filterVacations(following, false).remainingVacations
-                const orderedVacations = [...valid];
-                for (let v of vacations) {
-                    if (following.findIndex(f => v.id === f.id) < 0) {
-                        orderedVacations.push(v);
-                    }
-                }
-                vacations = orderedVacations;
+                vacations.sort((a, b) => b.isFollowed ? 1 : -1);
                 break;
             case VacationsSortBy.mostFollowers:
-                vacations.sort((a, b) => a.following < b.following ? 1 : -1);
+                vacations.sort((a, b) => a.followersCount < b.followersCount ? 1 : -1);
                 break;
         }
         return vacations

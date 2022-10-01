@@ -4,7 +4,6 @@ import { createStore } from "redux";
 //1. state
 export class VacationsState {
     public vacations: VacationModel[] = null;
-    public following: VacationModel[] = null;
 }
 
 //2. Action type
@@ -13,7 +12,6 @@ export enum VacationsActionType {
     AddVacation,
     UpdateVacation,
     DeleteVacation,
-    UpdateFollowing,
     Follow,
     Unfollow
 }
@@ -47,24 +45,18 @@ export function vacationsReducer(currState = new VacationsState(), action: Vacat
                 newState.vacations[indexToUpdate] = action.payload;
             }
             break;
-        case VacationsActionType.UpdateFollowing: // action.payload >>=> all following
-            newState.following = action.payload;
-            break;
         case VacationsActionType.Follow: // action.payload >>=> id of new follow
             const fIndexToUpdate = newState.vacations.findIndex(f => f.id === action.payload);
             if (fIndexToUpdate >= 0) {
-                newState.vacations[fIndexToUpdate].following++;
-                newState.following.push(newState.vacations[fIndexToUpdate]);
+                newState.vacations[fIndexToUpdate].followersCount++;
+                newState.vacations[fIndexToUpdate].isFollowed = true;
             }
             break;
-        case VacationsActionType.Unfollow: // action.payload >>=> id of follow to delete
-            const fIndexToDelete = newState.following.findIndex(f => f.id === action.payload);
+            case VacationsActionType.Unfollow: // action.payload >>=> id of follow to delete
+            const fIndexToDelete = newState.vacations.findIndex(f => f.id === action.payload);
             if (fIndexToDelete >= 0) {
-                newState.following.splice(fIndexToDelete, 1);
-            }
-            const vIndexToDelete = newState.vacations.findIndex(f => f.id === action.payload);
-            if (vIndexToDelete >= 0) {
-                newState.vacations[vIndexToDelete].following--;
+                newState.vacations[fIndexToDelete].followersCount--;
+                newState.vacations[fIndexToDelete].isFollowed = false;
                 break;
             }
     }

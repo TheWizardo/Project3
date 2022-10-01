@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import UserModel from "../../../Models/UserModel";
 import authService from "../../../Services/AuthService";
 import notifyService from "../../../Services/NotifyService";
-import vacationsService from "../../../Services/VacationsService";
 import "./Register.css";
 
 function Register(): JSX.Element {
@@ -21,7 +20,6 @@ function Register(): JSX.Element {
             }
             await authService.register(user); // bugs out when incorrect data is provided
             notifyService.success(`Welcome ${user.username}`);
-            await vacationsService.getMyVacations();
             navigate("/vacations");
         }
         catch (err: any) {

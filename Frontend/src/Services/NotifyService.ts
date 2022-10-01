@@ -20,6 +20,7 @@ class NotifyService {
 
     public error(err: any, options?: ToastOptions): void {
         const error = this.extractErrorMessage(err);
+        console.warn(err);
         toast.error(error, options);
     }
 

@@ -34,7 +34,7 @@ function FollowStats(): JSX.Element {
 
         vacationsService.getAllVacations().then(vacations => {
             // HANDLE SIMILARLY NAMED VACATIONS
-            let following = vacations.filter(v => v.following > 0);
+            let following = vacations.filter(v => v.followersCount > 0);
             let now = new Date();
             setProps({
                 options: {
@@ -48,7 +48,7 @@ function FollowStats(): JSX.Element {
                 series: [{
                     name: "followed",
                     data: following.map(v => {
-                        return { x: `${v.dstName}${v.startDate < now ? " [EXP]" : ""}`, y: v.following };
+                        return { x: `${v.dstName}${v.startDate < now ? " [EXP]" : ""}`, y: v.followersCount };
                     }),
                     color: "#a073ff"
                 }]

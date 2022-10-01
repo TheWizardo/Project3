@@ -75,10 +75,6 @@ function Home(): JSX.Element {
         }
         const p = new URLSearchParams(location.search).get('p');
         setPage(+p);
-
-        if (vacationsStore.getState().following === null) { // on refresh, there's no info in Store
-            vacationsService.getMyVacations().catch(err => notifyService.error(err));
-        }
     }, []);
 
 

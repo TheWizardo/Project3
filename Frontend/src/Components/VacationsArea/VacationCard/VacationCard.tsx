@@ -14,43 +14,29 @@ interface VacationCardProps {
     expired?: boolean;
 }
 
-function getClassByFollowing(following: VacationModel[], id: number): string {
-    if (!following) {
-        return "";
-    }
-    for (let v of following) {
-        if (v.id === id) {
-            return "unfollow";
-        }
-    }
-    return "follow";
-}
-
 
 function VacationCard(props: VacationCardProps): JSX.Element {
-    const [following, setFollowing] = useState<VacationModel[]>();
     const [vacation, setVacation] = useState<VacationModel>();
-    const [isFollowing, setIsFollowing] = useState<boolean>();
     const navigate = useNavigate();
 
     useEffect(() => {
-        setFollowing(vacationsStore.getState().following);
+        // setFollowing(vacationsStore.getState().following);
         const selectedVacation = vacationsStore.getState().vacations.find(v => v.id === props.vacation.id);
         setVacation(selectedVacation);
 
         const unsubscribe = vacationsStore.subscribe(() => {
-            setFollowing(vacationsStore.getState().following);
+            // setFollowing(vacationsStore.getState().following);
             const newVacation = { ...vacationsStore.getState().vacations.find(v => v.id === props.vacation.id) };
             setVacation(newVacation);
         });
         return unsubscribe;
     }, []);
 
-    useEffect(() => {
-        if (vacation && following) {
-            setIsFollowing(following.findIndex(f => f.id === vacation.id) > -1);
-        }
-    }, [vacation]);
+    // useEffect(() => {
+    //     if (vacation) {
+    //         setIsFollowing(following.findIndex(f => f.id === vacation.id) > -1);
+    //     }
+    // }, [vacation]);
 
     async function buttonPress(ev: any, vId: number) {
         try {
@@ -103,9 +89,10 @@ function VacationCard(props: VacationCardProps): JSX.Element {
                         </div>
                     </div>
                     <button
-                        className={getClassByFollowing(following, vacation.id)}
+                        className={vacation.isFollowed ? "unfollow" : "follow"}
                         disabled={authService.isAdmin()}
-                        onClick={(ev) => buttonPress(ev, vacation.id)}>{vacation.following}
+                        onClick={(ev) => buttonPress(ev, vacation.id)}>
+                        {vacation.followersCount}
                     </button>
 
                     {authService.isAdmin() && <div className="admin-actions">

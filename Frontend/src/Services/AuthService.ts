@@ -2,7 +2,6 @@ import axios from "axios";
 import CredentialsModel from "../Models/CredentialsModel";
 import UserModel from "../Models/UserModel";
 import { AuthAction, AuthActionType, authStore } from "../Redux/AuthState";
-import { VacationsAction, VacationsActionType, vacationsStore } from "../Redux/VacationsState";
 import config from "../Utils/config";
 import sha256 from "../Utils/hash";
 import jwtDecode from "jwt-decode";
@@ -27,8 +26,6 @@ class AuthService {
     public logout(): void {
         const authAction: AuthAction = { type: AuthActionType.Logout };
         authStore.dispatch(authAction);
-        const vacationsAction: VacationsAction = { type: VacationsActionType.UpdateFollowing, payload: [] };
-        vacationsStore.dispatch(vacationsAction);
     }
 
     public async usernameExists(username: string): Promise<boolean> {
