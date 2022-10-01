@@ -13,14 +13,10 @@
     color: rgb(45, 45, 106);
 }
 
-/* .Home .VacationCard:last-of-type {
-    border-radius: 0 0 1.5em 0;
+.Home .flex-container{
+    margin: 0 auto;
+    display: flex;
+    width: 80vw;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
-
-.Home .VacationCard:first-of-type {
-    border-radius: 0 1.5em 0 0;
-}
-
-.Home .VacationCard:only-of-type {
-    border-radius: 0 1.5em 1.5em 0;
-} */

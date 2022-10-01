@@ -30,7 +30,7 @@ function Destinations(): JSX.Element {
                 </thead>
                 <tbody>
                     {destinations.map(d => <tr key={d.id}>
-                        <td>{d.name}</td>
+                        <td className="center">{d.name}</td>
                         <td>{d.description}</td>
                         <td><NavLink to={`/destinations/${d.id}/edit`}><Edit /></NavLink></td>
                     </tr>)}

@@ -109,7 +109,7 @@ function AddVacation(): JSX.Element {
                 <span className="error-message">{dateError}</span>
 
                 <label>Image:</label>
-                <div>
+                <div className="container">
                     <input type="file" accept="image/*" onInput={onSelectFile}{...register("image")} />
                     <img src={preview} />
                 </div>

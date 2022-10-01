@@ -97,11 +97,8 @@ router.post("/api/vacations/:id/follow", verify.verifyUser, async (req: Request,
 router.delete("/api/vacations/:id/unfollow", verify.verifyUser, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const authHeader = req.header("authorization");
-        console.log(authHeader);
         const uId = await auth.getUserIDFromToken(authHeader);
-        console.log(uId);
         const vId = +req.params.id;
-        console.log(vId);
         const action = new FollowAction(vId, uId);
         await vacationsLogic.unfollowVacation(action);
         res.sendStatus(204);

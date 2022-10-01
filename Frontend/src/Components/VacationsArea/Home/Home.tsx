@@ -81,12 +81,11 @@ function Home(): JSX.Element {
     return (
         <div className="Home">
             <h1>Our Vacations</h1>
-            <label>Order By</label>
+            <label>Order By: </label>
 
             <select defaultValue={VacationsSortBy.recentFirst} onChange={(ev) => {
                 const newSortBy = +ev.target.value as VacationsSortBy;
-                console.log(newSortBy);
-                setSortBy(newSortBy);;
+                setSortBy(newSortBy);
             }}>
                 <option value={VacationsSortBy.AtoZ}>Name (A to Z)</option>
                 <option value={VacationsSortBy.longestFirst}>Duration (increasing)</option>
@@ -96,8 +95,10 @@ function Home(): JSX.Element {
                 <option value={VacationsSortBy.mostFollowers}>Most Followed</option>
                 {!authService.isAdmin() && <option value={VacationsSortBy.myVacationsFirst}>My Vacations</option>}
             </select>
-
-            {vacations.length > 0 && getVacationsByPage(vacations, page).map(v => <VacationCard vacation={v} expired={(new Date()).getTime() > v.startDate.getTime()} key={v.id} />)}
+            {vacations.length > 0 &&
+                <div className="flex-container">
+                    {getVacationsByPage(vacations, page).map(v => <VacationCard vacation={v} expired={(new Date()).getTime() > v.startDate.getTime()} key={v.id} />)}
+                </div>}
 
             {vacations.length > config.vacationCount && <div className="pagination" style={{ maxWidth: "100%", width: `${18.75 * Math.floor(1 + vacations.length / config.vacationCount)}%` }}>
                 <NavLink to={`/vacations?p=0`}><PageTop /></NavLink>
@@ -110,8 +111,8 @@ function Home(): JSX.Element {
                     setShowPast(c);
                     c ? filter([...vacations, ...expired], c) : filter([...vacations], c);
                 }}>Show Expired</Checkbox>
-                <p>
-                    <NavLink to="/vacations/add"><AddOutline /> Add</NavLink><NavLink to="/vacations/stats"><BarChart /> Stats</NavLink>
+                <p className="new-lines">
+                    <NavLink to="/vacations/add"><AddOutline /> Add</NavLink>&ensp;<NavLink to="/vacations/stats"><BarChart /> Stats</NavLink>
                 </p>
             </>}
         </div>

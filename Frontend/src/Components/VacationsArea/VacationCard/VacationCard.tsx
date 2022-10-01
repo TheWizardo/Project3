@@ -77,29 +77,31 @@ function VacationCard(props: VacationCardProps): JSX.Element {
         <section className={"VacationCard" + (props.expired ? " expired" : "")}>
             {vacation && <>
                 <h3>{vacation.dstName}</h3>
-                <div className="tab-1 new-lines">
+                <div className="new-lines">
+                    <div className="shadow-mask"></div>
                     <img src={`${config.imagesURL}/${vacation.imageName || "ImgNotFound.png"}`} />
                     <div className="container">
-                        <div className="info">
-                            <p>{vacation.dstDescription}</p>
-                            <p>{vacation.price}$</p>
-                        </div>
+                        <p className="info">{vacation.dstDescription}</p>
+                        <span className="price">{vacation.price}$</span>
                         <div className="dates">
                             <p><b><Send /> {vacation.startDate.toLocaleDateString()}</b> to <b>{vacation.endDate.toLocaleDateString()}</b></p>
                         </div>
                     </div>
-                    <button
-                        className={vacation.isFollowed ? "unfollow" : "follow"}
-                        disabled={authService.isAdmin()}
-                        onClick={(ev) => buttonPress(ev, vacation.id)}>
-                        {vacation.followersCount}
-                    </button>
+                    <div className="actions">
+                        <button
+                            className={vacation.isFollowed ? "unfollow" : "follow"}
+                            disabled={authService.isAdmin()}
+                            onClick={(ev) => buttonPress(ev, vacation.id)}>
+                            {vacation.followersCount}
+                        </button>
+                        {authService.isAdmin() && <>
+                            <br />
+                            <button className="del-btn" onClick={() => deleteVacation(vacation.dstName)}><Trash /></button>
+                            <br />
+                            <NavLink to={`/vacations/${vacation.id}/edit`} className="edit-btn"><Edit /></NavLink>
+                        </>}
+                    </div>
 
-                    {authService.isAdmin() && <div className="admin-actions">
-                        <button className="del-btn" onClick={() => deleteVacation(vacation.dstName)}><Trash /></button>
-                        <br />
-                        <NavLink to={`/vacations/${vacation.id}/edit`} className="edit-btn"><Edit /></NavLink>
-                    </div>}
                 </div>
             </>}
         </section>

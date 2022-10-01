@@ -132,7 +132,7 @@ function EditVacation(): JSX.Element {
                         onChange={(dates) => changeDates(dates)} />
 
                     <label>Image:</label>
-                    <div>
+                    <div className="container">
                         <input type="file" accept="image/*" onInput={onSelectFile}{...register("image")} />
                         <img src={preview} />
                     </div>

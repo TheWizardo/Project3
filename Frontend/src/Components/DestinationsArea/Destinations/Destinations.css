@@ -1,3 +1,19 @@
+.Destinations table,
+.Destinations td,
+.Destinations th {
+    border: 1px solid black;
+}
+
+.Destinations td {
+    padding: 0.25em 0.5em;
+}
+
 .Destinations {
-	
+    padding: 1ch;
+    width: fit-content;
+    margin: 1em auto;
+}
+
+.Destinations .center {
+    text-align: center;
 }

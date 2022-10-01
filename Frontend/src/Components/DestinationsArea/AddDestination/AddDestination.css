@@ -1,3 +1,8 @@
-.AddDestination {
-	
+.AddDestination textarea{
+    height: 7.5em;
+    resize: vertical;
+}
+
+.AddDestination{
+    margin-top: 2em;
 }

@@ -20,7 +20,7 @@ async function getAllVacations(authHeader: string): Promise<VacationModel[]> {
                         V.destinationID AS dstId,
                         destinationName AS dstName,
                         destinationDescription AS dstDescription,
-                        EXISTS(SELECT * FROM followers WHERE V.vacationID = F.vacationID AND userID = ?) AS isFollowed,
+                        EXISTS(SELECT * FROM followers WHERE vacationID = F.vacationID AND userID = ?) AS isFollowed,
                         COUNT(F.userID) AS followersCount
                       FROM vacations AS V
                       JOIN destinations AS D ON D.destinationID = V.destinationID
@@ -43,7 +43,7 @@ async function getVacationById(authHeader: string, vId: number): Promise<Vacatio
                         V.destinationID AS dstId,
                         destinationName AS dstName,
                         destinationDescription AS dstDescription,
-                        EXISTS(SELECT * FROM followers WHERE V.vacationID = F.vacationID AND userID = ?) AS isFollowed,
+                        EXISTS(SELECT * FROM followers WHERE vacationID = F.vacationID AND userID = ?) AS isFollowed,
                         COUNT(F.userID) AS followersCount
                       FROM vacations AS V
                       JOIN destinations AS D ON D.destinationID = V.destinationID

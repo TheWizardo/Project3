@@ -56,7 +56,7 @@ function EditDestination(): JSX.Element {
                     <input type="hidden" value={destination.id} {...register("id")}/>
                 </>}
 
-                <button>Add</button>
+                <button>Update</button>
             </form>
         </div>
     );
