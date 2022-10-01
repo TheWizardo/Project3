@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.get("/api/vacations", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const allVacations = await vacationsLogic.getAllVacations();
+        const authHeader = req.header("authorization");
+        const allVacations = await vacationsLogic.getAllVacations(authHeader);
         res.json(allVacations);
     }
     catch (err: any) {
@@ -17,16 +18,16 @@ router.get("/api/vacations", async (req: Request, res: Response, next: NextFunct
     }
 });
 
-router.get("/api/vacations/my-vacations", verify.verifyUser, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const authHeader = req.header("authorization");
-        const allVacations = await vacationsLogic.getVacationsByUser(authHeader);
-        res.json(allVacations);
-    }
-    catch (err: any) {
-        next(err);
-    }
-});
+// router.get("/api/vacations/my-vacations", verify.verifyUser, async (req: Request, res: Response, next: NextFunction) => {
+    //     try {
+//         const authHeader = req.header("authorization");
+//         const allVacations = await vacationsLogic.getVacationsByUser(authHeader);
+//         res.json(allVacations);
+//     }
+//     catch (err: any) {
+    //         next(err);
+//     }
+// });
 
 router.post("/api/vacations", verify.verifyAdmin, async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -43,7 +44,8 @@ router.post("/api/vacations", verify.verifyAdmin, async (req: Request, res: Resp
 router.get("/api/vacations/:id", verify.verifyAdmin, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = +req.params.id;
-        const vacation = await vacationsLogic.getVacationById(id);
+        const authHeader = req.header("authorization");
+        const vacation = await vacationsLogic.getVacationById(authHeader, id);
         res.json(vacation);
     }
     catch (err: any) {

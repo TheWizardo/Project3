@@ -11,7 +11,8 @@ class VacationModel {
     public endDate: Date;
     public image: UploadedFile;
     public imageName: string;
-    public following: number;
+    public followersCount: number;
+    public isFollowed: boolean;
 
     public constructor(vacation: VacationModel) {
         this.id = vacation.id;
@@ -23,7 +24,8 @@ class VacationModel {
         this.endDate = vacation.endDate;
         this.image = vacation.image;
         this.imageName = vacation.imageName;
-        this.following = vacation.following;
+        this.followersCount = vacation.followersCount;
+        this.isFollowed = vacation.isFollowed;
     }
 
     private static validationScheme = Joi.object({
@@ -36,7 +38,8 @@ class VacationModel {
         endDate: Joi.date().required(),
         image: Joi.object().optional(),
         imageName: Joi.string().optional(),
-        following: Joi.number().optional().integer().min(0)
+        followersCount: Joi.number().optional().integer().min(0),
+        isFollowed: Joi.boolean().optional()
     });
 
     public validate(): string {
