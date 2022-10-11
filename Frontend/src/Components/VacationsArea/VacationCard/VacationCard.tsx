@@ -20,12 +20,12 @@ function VacationCard(props: VacationCardProps): JSX.Element {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // setFollowing(vacationsStore.getState().following);
-        const selectedVacation = vacationsStore.getState().vacations.find(v => v.id === props.vacation.id);
-        setVacation(selectedVacation);
+        vacationsService.getAllVacations().then(vacations => {
+            const selectedVacation = vacations.find(v => v.id === props.vacation.id);
+            setVacation(selectedVacation);
+        }).catch(err => notifyService.error(err))
 
         const unsubscribe = vacationsStore.subscribe(() => {
-            // setFollowing(vacationsStore.getState().following);
             const newVacation = { ...vacationsStore.getState().vacations.find(v => v.id === props.vacation.id) };
             setVacation(newVacation);
         });

@@ -6,6 +6,15 @@ import { VacationsAction, VacationsActionType, vacationsStore } from "../Redux/V
 import config from "../Utils/config";
 
 class VacationsService {
+    public async checkEmpty(): Promise<void> {
+        if (vacationsStore.getState().vacations === null) await this.getAllVacations();
+    }
+
+    public flushAll(): void {
+        const action: VacationsAction = { type: VacationsActionType.FetchVacations, payload: null };
+        vacationsStore.dispatch(action);
+    }
+
     public async getAllVacations(): Promise<VacationModel[]> {
         if (vacationsStore.getState().vacations?.length > 0) {
             return vacationsStore.getState().vacations;
@@ -35,6 +44,8 @@ class VacationsService {
     }
 
     public async addVacation(vacation: VacationModel): Promise<void> {
+        await this.checkEmpty();
+
         const formData = new FormData();
         formData.append("dstName", vacation.dstName);
         formData.append("dstDescription", vacation.dstDescription);
@@ -60,10 +71,11 @@ class VacationsService {
     }
 
     public async updateVacation(vacation: VacationModel): Promise<void> {
+        await this.checkEmpty();
+
         const formData = new FormData();
         formData.append("id", vacation.id.toString());
         formData.append("followersCount", vacation.followersCount.toString());
-        formData.append("isFollowed", vacation.isFollowed.toString());
         formData.append("dstName", vacation.dstName);
         formData.append("dstDescription", vacation.dstDescription);
         formData.append("dstId", vacation.dstId.toString());
