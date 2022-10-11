@@ -14,7 +14,7 @@ function Login(): JSX.Element {
     async function send(cred: CredentialsModel) {
         try {
             await authService.login(cred); // bugs out when incorrect data is provided
-            notifyService.success("Welcome back m8!");
+            notifyService.success("Welcome back " + cred.username);
             navigate("/vacations");
         }
         catch (err: any) {
