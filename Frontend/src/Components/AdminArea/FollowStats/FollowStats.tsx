@@ -14,22 +14,27 @@ interface ChartProps {
 function getWindowWidth() {
     const main = document.querySelector("main");
     const height = main.offsetHeight;
-    const { innerWidth: width, innerHeight: windowHeight } = window;
-    return { width, height, windowHeight};
+    const { innerWidth: width} = window;
+    return { width, height};
 }
 
 function FollowStats(): JSX.Element {
     const [props, setProps] = useState<ChartProps>();
     const [width, setWidth] = useState<number>(600);
+    
+    
+    function handleResize() { // NEEDS TO BE WORKED OUT on the right track
+        const aspect = 1.5625;
+        const { width, height } = getWindowWidth();
+        
+        let newWidth = width * 0.9;
+        if (newWidth / aspect > height){
+            newWidth = height * aspect;
+        } 
+        setWidth(newWidth);
+    }
 
     useEffect(() => {
-        function handleResize() { // NEEDS TO BE WORKED OUT on the right track
-            let { width, height, windowHeight } = getWindowWidth();
-            if (height > windowHeight * 0.82) {
-                width = height * 1.54;
-            }
-            setWidth(width * 0.9);
-        }
         handleResize();
 
         vacationsService.getAllVacations().then(vacations => {
@@ -64,7 +69,7 @@ function FollowStats(): JSX.Element {
     return (
         <div className="FollowStats">
             <div className="row">
-                <div className="mixed-chart">
+                <div className={`mixed-chart`}>
                     {props && <Chart
                         options={props.options}
                         series={props.series}
