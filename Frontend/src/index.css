@@ -31,7 +31,7 @@ body {
     text-align: left;
     position: relative;
     box-shadow: 10px 10px 15px lightgray;
-    height: 50%;
+    /* height: 50%; */
 }
 
 .form-style input,

@@ -52,7 +52,7 @@ export function vacationsReducer(currState = new VacationsState(), action: Vacat
                 newState.vacations[fIndexToUpdate].isFollowed = true;
             }
             break;
-            case VacationsActionType.Unfollow: // action.payload >>=> id of follow to delete
+        case VacationsActionType.Unfollow: // action.payload >>=> id of follow to delete
             const fIndexToDelete = newState.vacations.findIndex(f => f.id === action.payload);
             if (fIndexToDelete >= 0) {
                 newState.vacations[fIndexToDelete].followersCount--;
@@ -60,7 +60,6 @@ export function vacationsReducer(currState = new VacationsState(), action: Vacat
                 break;
             }
     }
-
     return newState;
 }
 

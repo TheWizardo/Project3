@@ -13,12 +13,13 @@
 
 .VacationCard .unfollow,
 .VacationCard .follow {
-    font-size: large;
+    font-size: medium;
     text-align: center;
     position: absolute;
+    width: var(--card-padding-size);
+    height: var(--card-padding-size);
     right: 0;
     top: 0;
-    /* background-color: transparent; */
     color: whitesmoke;
     border-radius: 0 1rem 0 0;
 }
@@ -52,6 +53,7 @@
 .VacationCard img {
     width: calc(var(--card-size) - 2*var(--card-padding-size));
     height: calc(var(--card-size) - 2*var(--card-padding-size));
+    object-fit: cover;
 }
 
 .VacationCard .shadow-mask {
@@ -61,7 +63,7 @@
     width: calc(var(--card-size) - 2*var(--card-padding-size));
     height: calc(var(--card-size) - 2*var(--card-padding-size));
     opacity: .4;
-    background: linear-gradient(0, #00000033, transparent, #00000033);
+    background: linear-gradient(0, #00000077, transparent, #00000077);
 }
 
 .VacationCard {
