@@ -42,6 +42,7 @@ function verifyToken(authHeader: string): Promise<boolean> {
 }
 
 function getUserRoleFromToken(authHeader: string): string {
+    if (!authHeader) return;
     const token = authHeader.substring(7);
     // extracting user from token
     const container = jwt.decode(token) as { user: UserModel };
@@ -50,6 +51,7 @@ function getUserRoleFromToken(authHeader: string): string {
 }
 
 function getUserIDFromToken(authHeader: string): number {
+    if (!authHeader) return;
     const token = authHeader.substring(7);
     // extracting user from token
     const container = jwt.decode(token) as { user: UserModel };

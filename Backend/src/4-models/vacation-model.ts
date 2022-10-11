@@ -44,6 +44,9 @@ class VacationModel {
 
     public validate(): string {
         const result = VacationModel.validationScheme.validate(this);
+        if (this.endDate < this.startDate) return "endDate cannot be before startDate"
+        const now = new Date();
+        if (this.startDate < now) return "startDate cannot be in the past";
         return result.error?.message;
     }
 }

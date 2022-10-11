@@ -5,7 +5,6 @@ import DestinationModel from "../../../Models/DestinationModel";
 import VacationModel from "../../../Models/VacationModel";
 import notifyService from "../../../Services/NotifyService";
 import vacationsService from "../../../Services/VacationsService";
-import { vacationsStore } from "../../../Redux/VacationsState";
 import useVerifyAdmin from "../../../Utils/useVarifyAdmin";
 
 import { DateRangePicker } from 'rsuite';
@@ -17,8 +16,8 @@ function EditVacation(): JSX.Element {
     useVerifyAdmin();
     const [destinations, setDestinations] = useState<DestinationModel[]>([]);
     const [vacation, setVacation] = useState<VacationModel>();
-    const [vacationChanged, setVacationChanged] = useState<boolean>(true);
-    const [selectedFile, setSelectedFile] = useState<FileList>();
+    const [vacationChanged, setVacationChanged] = useState<boolean>(false);
+    const [selectedFile, setSelectedFile] = useState<Blob>();
     const [preview, setPreview] = useState<string>("");
     const params = useParams();
     const navigate = useNavigate();
@@ -47,16 +46,19 @@ function EditVacation(): JSX.Element {
         alteredVacation.startDate = dates[0];
         alteredVacation.endDate = dates[1];
         setVacation(alteredVacation);
-        setVacationChanged(false);
+        setVacationChanged(true);
     }
 
-    function changeDst(ev: React.ChangeEvent<HTMLSelectElement>) {
+    function changeDst(ev: any) {
+        const selectElem: HTMLSelectElement = ev.target;
+        const options = Array.from(selectElem.options);
+        const destId = +options.find(o => o.selected).value;
         const alteredVacation = { ...vacation };
-        const selectedDst = destinations.find(d => d.id === +ev.target.value);
+        const selectedDst = destinations.find(d => d.id === destId);
         alteredVacation.dstName = selectedDst.name;
         alteredVacation.dstDescription = selectedDst.description;
         setVacation(alteredVacation);
-        setVacationChanged(false);
+        setVacationChanged(true);
     }
 
     function onSelectFile(e: any) {
@@ -71,14 +73,17 @@ function EditVacation(): JSX.Element {
         alteredVacation.image = e.target.files[0];
         alteredVacation.imageName = e.target.files[0].name;
         setVacation(alteredVacation);
-        setVacationChanged(false);
+        setVacationChanged(true);
         setSelectedFile(e.target.files[0]);
     }
 
     useEffect(() => {
-        const selectedVacation = { ...vacationsStore.getState().vacations.find(v => v.id === +params.id) };
-        setPreview(`${config.imagesURL}/${selectedVacation.imageName}`);
-        setVacation(selectedVacation);
+        vacationsService.getAllVacations().then(vacations => {
+            const selectedVacation = { ...vacations.find(v => v.id === +params.id) };
+            setPreview(`${config.imagesURL}/${selectedVacation.imageName}`);
+            setVacation(selectedVacation);
+        })
+            .catch(err => notifyService.error(err));
         vacationsService.getDestinations().then(d => setDestinations(d))
             .catch(err => notifyService.error(err));
     }, []);
@@ -91,7 +96,7 @@ function EditVacation(): JSX.Element {
             return;
         }
 
-        const objectUrl = URL.createObjectURL(selectedFile[0])
+        const objectUrl = URL.createObjectURL(selectedFile)
         setPreview(objectUrl)
 
         // free memory when ever this component is unmounted
@@ -100,13 +105,14 @@ function EditVacation(): JSX.Element {
 
     return (
         <div className="EditVacation form-style">
+            {/* <input type="number" step="0.01" onChange={(ev) => console.log(ev)} /> */}
             <NavLink to="/destinations"><Explore /> Manage Destination</NavLink>
             <form onSubmit={handleSubmit(send)}>
                 <h1>Edit Vacation</h1>
 
                 {vacation && <>
                     <label>Destination:</label>
-                    {destinations.length > 0 && <select defaultValue={vacation.dstId} onChange={(ev) => changeDst(ev)} {...register("dstId", {
+                    {destinations.length > 0 && <select defaultValue={vacation.dstId} onChangeCapture={(ev) => changeDst(ev)} {...register("dstId", {
                         required: { value: true, message: "Please select a destination" },
                     })}>
                         {destinations.map(d => <option value={d.id} key={d.id}>{d.name}</option>)}
@@ -114,7 +120,7 @@ function EditVacation(): JSX.Element {
                     <span className="error-message">{formState.errors.dstId?.message}</span>
 
                     <label>Price:</label>
-                    <input type="number" step="0.01" defaultValue={vacation.price} onChange={() => setVacationChanged(false)} {...register("price", {
+                    <input type="number" step="0.01" defaultValue={vacation.price} onChangeCapture={() => setVacationChanged(true)} {...register("price", {
                         required: { value: true, message: "Missing price" },
                         min: { value: 0, message: "Price cannot be negative" },
                         max: { value: 10000, message: "Price cannot exceed 10000" }
@@ -141,7 +147,7 @@ function EditVacation(): JSX.Element {
                     <input type="number" hidden value={vacation.id} {...register("id")} />
                     <input type="number" hidden value={vacation.followersCount} {...register("followersCount")} />
                 </>}
-                <button disabled={vacationChanged}>Update</button>
+                <button disabled={!vacationChanged}>Update</button>
             </form>
         </div>
     );
