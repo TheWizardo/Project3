@@ -47,7 +47,6 @@ function Home(): JSX.Element {
         const checked = document.getElementById("my-vac").getAttribute("aria-checked") === "true";
         // supposed to use 'myVacations', but thats always false for some reason
         if (checked) {
-            console.log("my");
             vacationsService.getMyVacations().then(v => {
                 let arr = v;
                 if (showPast) {
@@ -58,7 +57,6 @@ function Home(): JSX.Element {
             });
         }
         else {
-            console.log("all");
             vacationsService.getAllVacations().then(v => {
                 let arr = v;
                 if (showPast) {

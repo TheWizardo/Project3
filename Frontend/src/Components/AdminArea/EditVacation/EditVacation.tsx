@@ -102,7 +102,6 @@ function EditVacation(): JSX.Element {
 
     return (
         <div className="EditVacation form-style">
-            {/* <input type="number" step="0.01" onChange={(ev) => console.log(ev)} /> */}
             <NavLink to="/destinations"><Explore /> Manage Destination</NavLink>
             <form onSubmit={handleSubmit(send)}>
                 <h1>Edit Vacation</h1>
