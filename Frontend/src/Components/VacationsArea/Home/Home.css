@@ -1,6 +1,10 @@
 .Home {
     padding-left: 10%;
     padding-right: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .Home .pagination {
@@ -19,4 +23,9 @@
     width: 80vw;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+.Home .filter-header{
+    display: flex;
+    justify-content: space-between;
 }

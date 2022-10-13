@@ -32,12 +32,6 @@ function VacationCard(props: VacationCardProps): JSX.Element {
         return unsubscribe;
     }, []);
 
-    // useEffect(() => {
-    //     if (vacation) {
-    //         setIsFollowing(following.findIndex(f => f.id === vacation.id) > -1);
-    //     }
-    // }, [vacation]);
-
     async function buttonPress(ev: any, vId: number) {
         try {
             if (!authService.isLoggedIn()) {

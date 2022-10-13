@@ -67,6 +67,7 @@
 }
 
 .VacationCard {
+    background-color: azure;
     position: relative;
     width: var(--card-size);
     padding: var(--card-padding-size);
@@ -79,7 +80,6 @@
 .VacationCard>h3 {
     z-index: 3;
     color: white;
-    /* box-shadow: 5px 5px black; */
     position: absolute;
     top: calc(var(--card-padding-size) - 0.25em);
     margin-left: 0.25ch;
