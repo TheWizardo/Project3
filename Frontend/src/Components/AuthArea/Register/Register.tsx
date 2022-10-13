@@ -18,7 +18,7 @@ function Register(): JSX.Element {
                 setUsernameTaken(true);
                 return;
             }
-            await authService.register(user); // bugs out when incorrect data is provided
+            await authService.register(user);
             notifyService.success(`Welcome ${user.username}`);
             navigate("/vacations");
         }

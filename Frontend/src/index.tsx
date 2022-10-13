@@ -13,12 +13,10 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Layout />
-            <ToastContainer limit={3} transition={Flip} position="bottom-right" autoClose={2500}/>
-        </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+        <Layout />
+        <ToastContainer limit={3} transition={Flip} position="bottom-right" autoClose={2500} />
+    </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

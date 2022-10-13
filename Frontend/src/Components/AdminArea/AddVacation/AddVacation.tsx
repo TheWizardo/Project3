@@ -25,6 +25,7 @@ function AddVacation(): JSX.Element {
 
     async function send(vacation: VacationModel): Promise<void> {
         try {
+            // validation and applying changes 
             if (dates.length < 1) {
                 setDateError("Please choose dates");
                 return;
@@ -34,6 +35,8 @@ function AddVacation(): JSX.Element {
             const selectedDst = destinations.find(d => d.id === +vacation.dstId);
             vacation.dstName = selectedDst.name;
             vacation.dstDescription = selectedDst.description;
+
+            // adding vacation
             await vacationsService.addVacation(vacation);
             notifyService.success("Vacation added successfully!");
             navigate("/vacations");
@@ -48,27 +51,27 @@ function AddVacation(): JSX.Element {
             .catch(err => notifyService.error(err));
     }, []);
 
+    // handling the update of preview photo
     useEffect(() => {
         if (!selectedFile) {
-            setPreview(`${config.imagesURL}/ImgNotFound.png`)
-            return
+            setPreview(`${config.imagesURL}/ImgNotFound.png`);
+            return;
         }
 
-        const objectUrl = URL.createObjectURL(selectedFile)
-        setPreview(objectUrl)
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setPreview(objectUrl);
 
         // free memory when ever this component is unmounted
-        return () => URL.revokeObjectURL(objectUrl)
+        return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
 
     const onSelectFile = (e: any) => {
         if (!e.target.files || e.target.files.length === 0) {
-            setSelectedFile(undefined)
-            return
+            setSelectedFile(undefined);
+            return;
         }
 
-        // I've kept this example simple by using the first image instead of multiple
-        setSelectedFile(e.target.files[0])
+        setSelectedFile(e.target.files[0]);
     }
 
     return (

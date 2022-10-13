@@ -20,12 +20,14 @@ function RoutNotFound(): JSX.Element {
     const [x_pos, setX_pos] = useState<number>(100);
     const [y_pos, setY_pos] = useState<number>(100);
     const navigate = useNavigate();
-
+    
     const messages = ["Terminating cooling system",
-        "Overclocking nuclear cores",
-        "Raising acidic composition",
-        "Bribing guards to overlook the situation",
-        "RUNNING FOR MY LIFE"];
+    "Overclocking nuclear cores",
+    "Raising acidic composition",
+    "Bribing guards to overlook the situation",
+    "RUNNING FOR MY LIFE"];
+    const ttl = 15;
+    const interval = ttl / messages.length;
 
     useEffect(() => {
         if (!destruct) return;
@@ -43,8 +45,8 @@ function RoutNotFound(): JSX.Element {
                         navigate("/");
                     }, 1800);
                 }
-                if (currTime % 3 === 0 && currTime !== 0) {
-                    const index = (15 - currTime) / 3;
+                if (currTime % interval === 0 && currTime !== 0) {
+                    const index = (ttl - currTime) / interval;
                     notifyService.error(messages[index], { autoClose: 1650 });
                 }
                 return currTime - 1;
@@ -75,7 +77,7 @@ function RoutNotFound(): JSX.Element {
     }, [destruct]);
 
     function selfDestruct() {
-        setTime(15);
+        setTime(ttl);
         setDestruct(true);
     }
 

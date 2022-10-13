@@ -11,7 +11,7 @@ import "./VacationCard.css";
 
 interface VacationCardProps {
     vacation: VacationModel;
-    expired?: boolean;
+    expired: boolean;
 }
 
 
@@ -20,12 +20,14 @@ function VacationCard(props: VacationCardProps): JSX.Element {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // setting up the card by the ID
         vacationsService.getAllVacations().then(vacations => {
             const selectedVacation = vacations.find(v => v.id === props.vacation.id);
             setVacation(selectedVacation);
         }).catch(err => notifyService.error(err))
 
         const unsubscribe = vacationsStore.subscribe(() => {
+            // updating the vacations after every redux store change
             const newVacation = { ...vacationsStore.getState().vacations.find(v => v.id === props.vacation.id) };
             setVacation(newVacation);
         });
@@ -34,6 +36,7 @@ function VacationCard(props: VacationCardProps): JSX.Element {
 
     async function buttonPress(ev: any, vId: number) {
         try {
+            // checking whether the user's token is still valid
             if (!authService.isLoggedIn()) {
                 navigate("/login");
                 return;

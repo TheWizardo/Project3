@@ -43,18 +43,8 @@ async function addDestination(dst: DestinationModel): Promise<DestinationModel> 
     return dst;
 }
 
-// async function deleteDestinations(id: number): Promise<void> {
-//     // removing the destination from the given 
-//     const sqlQuery = `DELETE FROM destinations WHERE destinationID = ${id}`;
-//     const result: OkPacket = await dal.execute(sqlQuery);
-//     if (result.affectedRows === 0) {
-//         throw new IdNotFound(id);
-//     }
-// }
-
 export default {
     getAllDestinations,
     updateDestination,
     addDestination
-    // deleteDestinations
 };

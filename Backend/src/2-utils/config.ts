@@ -1,6 +1,8 @@
 import path from "path";
 
 class Config {
+    public environment = "development";
+    // public environment = "production";
     public port = "3001";
     public mysqlDatabase = "project3";
     public mysqlHost = "localhost";

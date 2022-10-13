@@ -36,6 +36,7 @@ function Home(): JSX.Element {
         return arr;
     }
 
+    // filter out the expired vacations
     function filter(vacations: VacationModel[]) {
         const { remainingVacations, expiredVacations } = vacationsService.filterVacations(vacations, showPast);
         const sorted = vacationsService.sortBy(remainingVacations, sortBy);
@@ -45,14 +46,18 @@ function Home(): JSX.Element {
 
     function storeChange() {
         const checked = document.getElementById("my-vac").getAttribute("aria-checked") === "true";
+        // TO FIX
         // supposed to use 'myVacations', but thats always false for some reason
         if (checked) {
             vacationsService.getMyVacations().then(v => {
                 let arr = v;
                 if (showPast) {
+                    // combining all vacations
                     arr = [...arr, ...expired];
                 }
+                // sorting
                 const sorted = vacationsService.sortBy(arr, sortBy);
+                // filtering
                 return filter(sorted);
             });
         }
@@ -69,8 +74,9 @@ function Home(): JSX.Element {
     }
 
     useEffect(() => {
+        // on startup, there is no logged user, 
         if (!authService.isLoggedIn()) {
-            navigate("/silent-logout");
+            navigate("/login");
             return;
         }
         storeChange();
@@ -79,23 +85,26 @@ function Home(): JSX.Element {
         return unsubscribeVacations;
     }, []);
 
+    // page movement
     useEffect(() => {
         const p = new URLSearchParams(location.search).get('p');
         setPage(+p);
     }, [location]);
 
+    // sort changing
     useEffect(() => filter(vacations), [sortBy]);
 
+    // show/un-show expired 
     useEffect(() => {
-        const sorted = vacationsService.sortBy(vacations, sortBy);
         if (showPast) {
-            filter([...sorted, ...expired]);
+            filter([...vacations, ...expired]);
         }
         else {
-            filter([...sorted]);
+            filter([...vacations]);
         }
     }, [showPast])
 
+    // showing only "my vacations"
     useEffect(() => {
         (async () => {
             filter(myVacations ? await vacationsService.getMyVacations() : await vacationsService.getAllVacations());

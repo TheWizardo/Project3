@@ -11,7 +11,7 @@ interface ChartProps {
     series: ApexAxisChartSeries;
 }
 
-function getWindowWidth() {
+function getWindowDimensions() {
     const main = document.querySelector("main");
     const height = main.offsetHeight;
     const { innerWidth: width} = window;
@@ -23,11 +23,12 @@ function FollowStats(): JSX.Element {
     const [width, setWidth] = useState<number>(600);
     
     
-    function handleResize() { // NEEDS TO BE WORKED OUT on the right track
+    function handleResize() {
         const aspect = 1.5625;
-        const { width, height } = getWindowWidth();
+        const { width, height } = getWindowDimensions();
         
         let newWidth = width * 0.9;
+        // constraining the chart so it will not overflow from the page
         if (newWidth / aspect > height){
             newWidth = height * aspect;
         } 
@@ -38,9 +39,11 @@ function FollowStats(): JSX.Element {
         handleResize();
 
         vacationsService.getAllVacations().then(vacations => {
+            // TO DO
             // HANDLE SIMILARLY NAMED VACATIONS
             let following = vacations.filter(v => v.followersCount > 0);
             let now = new Date();
+            // setting the props that will be passed to the chart elem
             setProps({
                 options: {
                     chart: {

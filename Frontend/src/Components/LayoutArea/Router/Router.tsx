@@ -20,8 +20,7 @@ function Router(): JSX.Element {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/" element={<Navigate to="/vacations" />} />
-                <Route path="/silent-logout" element={<Logout silent={true}/>} />
-                <Route path="/logout" element={<Logout silent={false}/>} />
+                <Route path="/logout" element={<Logout/>} />
                 <Route path="/vacations" element={<Home />} />
                 <Route path="/vacations/:id/edit" element={<EditVacation />} />
                 <Route path="/vacations/add" element={<AddVacation />} />

@@ -5,18 +5,16 @@ import notifyService from "../../../Services/NotifyService";
 import vacationsService from "../../../Services/VacationsService";
 import "./Logout.css";
 
-interface LogoutProps {
-    silent: boolean;
-}
 
-function Logout(props: LogoutProps): JSX.Element {
+function Logout(): JSX.Element {
 
     const navigate = useNavigate();
 
     useEffect(() => {
         try {
             authService.logout();
-            if (!props.silent) notifyService.success("logged out");
+            notifyService.success("logged out");
+            // flushing the vacations in the redux store
             vacationsService.flushAll();
             navigate("/login");
         }

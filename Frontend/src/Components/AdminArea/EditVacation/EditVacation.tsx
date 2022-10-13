@@ -26,6 +26,7 @@ function EditVacation(): JSX.Element {
 
     async function send(sendVacation: VacationModel): Promise<void> {
         try {
+            // applying changes
             sendVacation.startDate = vacation.startDate;
             sendVacation.endDate = vacation.endDate;
             sendVacation.dstId = +sendVacation.dstId;
@@ -41,6 +42,7 @@ function EditVacation(): JSX.Element {
         }
     }
 
+    // handling change of dates
     function changeDates(dates: Date[]) {
         const alteredVacation = { ...vacation };
         alteredVacation.startDate = dates[0];
@@ -49,7 +51,9 @@ function EditVacation(): JSX.Element {
         setVacationChanged(true);
     }
 
-    function changeDst(ev: any) {;
+    // handling change of destination
+    function changeDst(ev: any) {
+        ;
         const alteredVacation = { ...vacation };
         const selectedDst = destinations.find(d => d.id === +ev.target.value);
         alteredVacation.dstName = selectedDst.name;
@@ -58,6 +62,7 @@ function EditVacation(): JSX.Element {
         setVacationChanged(true);
     }
 
+    // handling the update of preview photo
     function onSelectFile(e: any) {
         const alteredVacation = { ...vacation };
         if (!e.target.files || e.target.files.length === 0) {
@@ -75,12 +80,15 @@ function EditVacation(): JSX.Element {
     }
 
     useEffect(() => {
+        // fetching the selected vacation by the ID
         vacationsService.getAllVacations().then(vacations => {
             const selectedVacation = { ...vacations.find(v => v.id === +params.id) };
             setPreview(`${config.imagesURL}/${selectedVacation.imageName}`);
             setVacation(selectedVacation);
         })
             .catch(err => notifyService.error(err));
+
+        // fetching destinations 
         vacationsService.getDestinations().then(d => setDestinations(d))
             .catch(err => notifyService.error(err));
     }, []);
@@ -96,7 +104,6 @@ function EditVacation(): JSX.Element {
         const objectUrl = URL.createObjectURL(selectedFile)
         setPreview(objectUrl)
 
-        // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
 
