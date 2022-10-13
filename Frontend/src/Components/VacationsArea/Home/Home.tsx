@@ -10,6 +10,7 @@ import { Checkbox } from 'rsuite';
 import "./Home.css";
 import { VacationsSortBy } from "../../../Models/VacationsSortModel";
 import config from "../../../Utils/config";
+import Spinner from "../../LayoutArea/Spinner/Spinner";
 
 
 function Home(): JSX.Element {
@@ -23,7 +24,7 @@ function Home(): JSX.Element {
     const [page, setPage] = useState<number>(0);
 
     function getVacationsByPage(vacations: VacationModel[], page: number): VacationModel[] {
-        const lastPage = Math.floor((vacations.length - 1) / config.vacationCount);
+        const lastPage = Math.max(0, Math.floor((vacations.length - 1) / config.vacationCount));
         const arr: VacationModel[] = [];
         if (page > lastPage) {
             navigate(`/vacations?p=${lastPage}`);
@@ -59,7 +60,7 @@ function Home(): JSX.Element {
                 const sorted = vacationsService.sortBy(arr, sortBy);
                 // filtering
                 return filter(sorted);
-            });
+            }).catch();
         }
         else {
             vacationsService.getAllVacations().then(v => {
@@ -69,7 +70,7 @@ function Home(): JSX.Element {
                 }
                 const sorted = vacationsService.sortBy(arr, sortBy);
                 return filter(sorted);
-            });
+            }).catch();
         }
     }
 
@@ -106,9 +107,12 @@ function Home(): JSX.Element {
 
     // showing only "my vacations"
     useEffect(() => {
-        (async () => {
-            filter(myVacations ? await vacationsService.getMyVacations() : await vacationsService.getAllVacations());
-        })();
+        if (myVacations) {
+            vacationsService.getMyVacations().then(v => filter(v)).catch();
+        }
+        else {
+            vacationsService.getAllVacations().then(v => filter(v)).catch();
+        }
     }, [myVacations]);
 
 
@@ -134,10 +138,12 @@ function Home(): JSX.Element {
                     <Checkbox id={"my-vac"} disabled={authService.isAdmin()} onChange={(v, c) => setMyVacations(c)}>My Vacations</Checkbox>
                 </div>
 
-                {vacations.length > 0 &&
-                    <div className="flex-container">
+                <div className="flex-container">
+                    {vacations.length === 0 && <Spinner />}
+                    {vacations && <>
                         {getVacationsByPage(vacations, page).map(v => <VacationCard vacation={v} expired={(new Date()).getTime() > v.startDate.getTime()} key={v.id} />)}
-                    </div>}
+                    </>}
+                </div>
             </div>
 
             <div>

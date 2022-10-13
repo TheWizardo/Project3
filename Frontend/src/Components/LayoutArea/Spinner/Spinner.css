@@ -1,0 +1,7 @@
+.Spinner {
+	width: 200px;
+}
+
+.Spinner > img {
+    margin: 0 auto;
+}
