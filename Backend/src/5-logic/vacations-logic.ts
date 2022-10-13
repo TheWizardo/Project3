@@ -4,7 +4,6 @@ import { OkPacket } from "mysql";
 import { IdNotFound, ValidationError } from "../4-models/client-errors";
 import { v4 as uuid } from 'uuid';
 import safeDelete from "../2-utils/safe-delete";
-import FollowAction from "../4-models/follow-action";
 import auth from "../2-utils/auth";
 import config from "../2-utils/config";
 
@@ -117,22 +116,21 @@ async function deleteVacation(id: number): Promise<void> {
     }
 }
 
-async function unfollowVacation(action: FollowAction): Promise<void> {
+async function unfollowVacation(vId: number, uId: number): Promise<void> {
     // deleting the follow connection in the DB
     const sqlQuery = `DELETE FROM followers WHERE vacationID = ? AND userID = ?`;
-    const result: OkPacket = await dal.execute(sqlQuery, action.vacationId, action.userId);
+    const result: OkPacket = await dal.execute(sqlQuery, vId, uId);
     // making sure the update was registered
     if (result.affectedRows === 0) {
-        throw new IdNotFound(action.vacationId);
+        throw new IdNotFound(vId);
     }
 }
 
-async function followVacation(action: FollowAction): Promise<FollowAction> {
+async function followVacation(vId: number, uId: number): Promise<number> {
     // adding new follow connection to the DB
     const sqlQuery = `INSERT INTO followers(vacationID, userID) VALUES(?, ?)`;
-    const result: OkPacket = await dal.execute(sqlQuery, action.vacationId, action.userId);
-    //console.log(result);******************************************
-    return action;
+    const result: OkPacket = await dal.execute(sqlQuery, vId, uId);
+    return vId;
 }
 
 async function AddAndReplaceImage(vacation?: VacationModel, id?: number): Promise<void> {

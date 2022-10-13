@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import auth from '../2-utils/auth';
 import verify from '../3-middleware/verify-user';
-import FollowAction from '../4-models/follow-action';
 import VacationModel from '../4-models/vacation-model';
 import vacationsLogic from '../5-logic/vacations-logic';
 
@@ -85,8 +84,7 @@ router.post("/api/vacations/:id/follow", verify.verifyUser, async (req: Request,
         const authHeader = req.header("authorization");
         const uId = await auth.getUserIDFromToken(authHeader);
         const vId = +req.params.id;
-        const action = new FollowAction(vId, uId);
-        const addedFollow = await vacationsLogic.followVacation(action);
+        const addedFollow = await vacationsLogic.followVacation(vId, uId);
         res.status(201).json(addedFollow);
     }
     catch (err: any) {
@@ -99,8 +97,7 @@ router.delete("/api/vacations/:id/unfollow", verify.verifyUser, async (req: Requ
         const authHeader = req.header("authorization");
         const uId = await auth.getUserIDFromToken(authHeader);
         const vId = +req.params.id;
-        const action = new FollowAction(vId, uId);
-        await vacationsLogic.unfollowVacation(action);
+        await vacationsLogic.unfollowVacation(vId, uId);
         res.sendStatus(204);
     }
     catch (err: any) {
