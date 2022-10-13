@@ -4,6 +4,5 @@ export enum VacationsSortBy{
     priceLowToHigh,
     longestFirst,
     longestLast,
-    myVacationsFirst,
     mostFollowers
 }

@@ -4,6 +4,7 @@ import VacationModel from "../Models/VacationModel";
 import { VacationsSortBy } from "../Models/VacationsSortModel";
 import { VacationsAction, VacationsActionType, vacationsStore } from "../Redux/VacationsState";
 import config from "../Utils/config";
+import notifyService from "./NotifyService";
 
 class VacationsService {
     public async checkEmpty(): Promise<void> {
@@ -29,6 +30,11 @@ class VacationsService {
         const action: VacationsAction = { type: VacationsActionType.FetchVacations, payload: vacations };
         vacationsStore.dispatch(action);
         return vacations;
+    }
+
+    public async getMyVacations(): Promise<VacationModel[]> {
+        const all = await this.getAllVacations();
+        return all.filter(v => v.isFollowed);
     }
 
     public async deleteVacation(id: number): Promise<void> {
@@ -129,9 +135,6 @@ class VacationsService {
                 break;
             case VacationsSortBy.longestLast:
                 vacations = this.sortBy(vacations, VacationsSortBy.longestFirst).reverse();
-                break;
-            case VacationsSortBy.myVacationsFirst:
-                vacations.sort((a, b) => b.isFollowed ? 1 : -1);
                 break;
             case VacationsSortBy.mostFollowers:
                 vacations.sort((a, b) => a.followersCount < b.followersCount ? 1 : -1);

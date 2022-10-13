@@ -49,12 +49,9 @@ function EditVacation(): JSX.Element {
         setVacationChanged(true);
     }
 
-    function changeDst(ev: any) {
-        const selectElem: HTMLSelectElement = ev.target;
-        const options = Array.from(selectElem.options);
-        const destId = +options.find(o => o.selected).value;
+    function changeDst(ev: any) {;
         const alteredVacation = { ...vacation };
-        const selectedDst = destinations.find(d => d.id === destId);
+        const selectedDst = destinations.find(d => d.id === +ev.target.value);
         alteredVacation.dstName = selectedDst.name;
         alteredVacation.dstDescription = selectedDst.description;
         setVacation(alteredVacation);
