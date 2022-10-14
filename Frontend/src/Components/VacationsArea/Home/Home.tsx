@@ -38,8 +38,11 @@ function Home(): JSX.Element {
     }
 
     // filter out the expired vacations
-    function filter(vacations: VacationModel[]) {
+    function filter(vacations: VacationModel[], sender?: string) {
         const { remainingVacations, expiredVacations } = vacationsService.filterVacations(vacations, showPast);
+        if (expiredVacations.length === 0) {
+            console.log(sender);
+        }
         const sorted = vacationsService.sortBy(remainingVacations, sortBy);
         setVacations(sorted);
         setExpired(expiredVacations);
@@ -56,10 +59,8 @@ function Home(): JSX.Element {
                     // combining all vacations
                     arr = [...arr, ...expired];
                 }
-                // sorting
-                const sorted = vacationsService.sortBy(arr, sortBy);
                 // filtering
-                return filter(sorted);
+                return filter(arr);
             }).catch();
         }
         else {
@@ -68,8 +69,7 @@ function Home(): JSX.Element {
                 if (showPast) {
                     arr = [...arr, ...expired];
                 }
-                const sorted = vacationsService.sortBy(arr, sortBy);
-                return filter(sorted);
+                return filter(arr, "storeChange");
             }).catch();
         }
     }
@@ -93,15 +93,22 @@ function Home(): JSX.Element {
     }, [location]);
 
     // sort changing
-    useEffect(() => filter(vacations), [sortBy]);
+    useEffect(() => {
+        if (!showPast) {
+            filter([...vacations, ...expired], "sortBy-False");
+        }
+        else {
+            filter([...vacations], "sortBy-All");
+        }
+    }, [sortBy]);
 
     // show/un-show expired 
     useEffect(() => {
         if (showPast) {
-            filter([...vacations, ...expired]);
+            filter([...vacations, ...expired], "showPast-All");
         }
         else {
-            filter([...vacations]);
+            filter([...vacations], "showPast-False");
         }
     }, [showPast])
 
