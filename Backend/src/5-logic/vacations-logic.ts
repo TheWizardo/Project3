@@ -70,7 +70,7 @@ async function addVacation(vacation: VacationModel): Promise<VacationModel> {
     // insert new vacation into DB
     const sqlQuery = `INSERT INTO vacations(startDate, endDate, vacationPrice, vacationImgPath, destinationID)
     VALUES(?, ?, ?, ?, ?)`;
-    const result: OkPacket = await dal.execute(sqlQuery, vacation.startDate, vacation.endDate, vacation.price, vacation.imageName, vacation.dstId);
+    const result: OkPacket = await dal.execute(sqlQuery, parseDate(vacation.startDate), parseDate(vacation.endDate), vacation.price, vacation.imageName, vacation.dstId);
     // updating the vacation object with the returned data
     vacation.id = result.insertId;
     vacation.followersCount = 0;
@@ -96,7 +96,7 @@ async function updateVacation(vacation: VacationModel): Promise<VacationModel> {
                         vacationPrice = ?,
                         destinationID = ?
                       WHERE vacationID = ?`;
-    const result: OkPacket = await dal.execute(sqlQuery, vacation.imageName, vacation.startDate, vacation.endDate, vacation.price, vacation.dstId, vacation.id);
+    const result: OkPacket = await dal.execute(sqlQuery, vacation.imageName, parseDate(vacation.startDate), parseDate(vacation.endDate), vacation.price, vacation.dstId, vacation.id);
     // making sure the update was registered
     if (result.affectedRows === 0) {
         throw new IdNotFound(vacation.id);
@@ -153,6 +153,10 @@ async function AddAndReplaceImage(vacation?: VacationModel, id?: number): Promis
         await vacation.image.mv(`${config.imagesFolder}/${vacation.imageName}`);
         delete vacation.image;
     }
+}
+
+function parseDate(d: Date): string {
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 }
 
 export default {

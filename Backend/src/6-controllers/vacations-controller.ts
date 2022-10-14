@@ -32,6 +32,8 @@ router.post("/api/vacations", verify.verifyAdmin, async (req: Request, res: Resp
     try {
         req.body.image = req.files?.image;
         const vacation = new VacationModel(req.body);
+        vacation.endDate = new Date(vacation.endDate);
+        vacation.startDate = new Date(vacation.startDate);
         const addedVacation = await vacationsLogic.addVacation(vacation);
         res.status(201).json(addedVacation);
     }
@@ -71,6 +73,8 @@ router.put("/api/vacations/:id", verify.verifyAdmin, async (req: Request, res: R
         req.body.price = +req.body.price;
         req.body.dstId = +req.body.dstId;
         const vacation = new VacationModel(req.body);
+        vacation.endDate = new Date(vacation.endDate);
+        vacation.startDate = new Date(vacation.startDate);
         const updatedVacation = await vacationsLogic.updateVacation(vacation);
         res.json(updatedVacation);
     }
