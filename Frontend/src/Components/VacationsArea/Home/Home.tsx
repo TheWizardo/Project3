@@ -38,11 +38,8 @@ function Home(): JSX.Element {
     }
 
     // filter out the expired vacations
-    function filter(vacations: VacationModel[], sender?: string) {
+    function filter(vacations: VacationModel[]) {
         const { remainingVacations, expiredVacations } = vacationsService.filterVacations(vacations, showPast);
-        if (expiredVacations.length === 0) {
-            console.log(sender);
-        }
         const sorted = vacationsService.sortBy(remainingVacations, sortBy);
         setVacations(sorted);
         setExpired(expiredVacations);
@@ -69,7 +66,7 @@ function Home(): JSX.Element {
                 if (showPast) {
                     arr = [...arr, ...expired];
                 }
-                return filter(arr, "storeChange");
+                return filter(arr);
             }).catch();
         }
     }
@@ -95,20 +92,20 @@ function Home(): JSX.Element {
     // sort changing
     useEffect(() => {
         if (!showPast) {
-            filter([...vacations, ...expired], "sortBy-False");
+            filter([...vacations, ...expired]);
         }
         else {
-            filter([...vacations], "sortBy-All");
+            filter([...vacations]);
         }
     }, [sortBy]);
 
     // show/un-show expired 
     useEffect(() => {
         if (showPast) {
-            filter([...vacations, ...expired], "showPast-All");
+            filter([...vacations, ...expired]);
         }
         else {
-            filter([...vacations], "showPast-False");
+            filter([...vacations]);
         }
     }, [showPast])
 
