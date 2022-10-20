@@ -2,7 +2,7 @@
 
 ## Installation
 1. First, download the project and unzip it.
-2. Restore the database usind the provided ```.sql```` file.
+2. Restore the database usind the provided ```.sql``` file.
 3. Run the command ```npm i``` on both the Backend and Frontend directories.
 
 ## Running
