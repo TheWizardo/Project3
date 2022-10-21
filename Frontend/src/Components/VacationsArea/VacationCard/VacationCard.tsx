@@ -21,10 +21,9 @@ function VacationCard(props: VacationCardProps): JSX.Element {
 
     useEffect(() => {
         // setting up the card by the ID
-        vacationsService.getAllVacations().then(vacations => {
-            const selectedVacation = vacations.find(v => v.id === props.vacation.id);
-            setVacation(selectedVacation);
-        }).catch(err => notifyService.error(err))
+        vacationsService.getVacationById(props.vacation.id)
+            .then(v => setVacation(v))
+            .catch(err => notifyService.error(err))
 
         const unsubscribe = vacationsStore.subscribe(() => {
             // updating the vacations after every redux store change

@@ -53,7 +53,6 @@ function EditVacation(): JSX.Element {
 
     // handling change of destination
     function changeDst(ev: any) {
-        ;
         const alteredVacation = { ...vacation };
         const selectedDst = destinations.find(d => d.id === +ev.target.value);
         alteredVacation.dstName = selectedDst.name;
@@ -81,10 +80,9 @@ function EditVacation(): JSX.Element {
 
     useEffect(() => {
         // fetching the selected vacation by the ID
-        vacationsService.getAllVacations().then(vacations => {
-            const selectedVacation = { ...vacations.find(v => v.id === +params.id) };
-            setPreview(`${config.imagesURL}/${selectedVacation.imageName}`);
-            setVacation(selectedVacation);
+        vacationsService.getVacationById(+params.id).then(v => {
+            setPreview(`${config.imagesURL}/${v.imageName}`);
+            setVacation(v);
         })
             .catch(err => notifyService.error(err));
 

@@ -36,6 +36,24 @@ class VacationsService {
         return vacations;
     }
 
+    public async getVacationById(id: number): Promise<VacationModel> {
+        const all = await this.getAllVacations();
+        return all.find(v => v.id === id);
+    }
+
+    
+    public getVacationsByPage(vacations: VacationModel[], page: number, lastPage: number): VacationModel[] {
+        const arr: VacationModel[] = [];
+        if (page > lastPage) {
+            return arr;
+        }
+        for (let i = 0; i < config.vacationCount; i++) {
+            if (i + (page * config.vacationCount) >= vacations.length) break;
+            arr.push(vacations[i + (page * config.vacationCount)]);
+        }
+        return arr;
+    }
+
     public async getMyVacations(): Promise<VacationModel[]> {
         const all = await this.getAllVacations();
         return all.filter(v => v.isFollowed);

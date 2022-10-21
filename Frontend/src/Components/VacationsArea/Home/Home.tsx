@@ -23,18 +23,15 @@ function Home(): JSX.Element {
     const [sortBy, setSortBy] = useState<VacationsSortBy>(VacationsSortBy.recentFirst)
     const [page, setPage] = useState<number>(0);
 
-    function getVacationsByPage(vacations: VacationModel[], page: number): VacationModel[] {
+    function getRelevantVacations(): VacationModel[] {
         const lastPage = Math.max(0, Math.floor((vacations.length - 1) / config.vacationCount));
-        const arr: VacationModel[] = [];
-        if (page > lastPage) {
+        console.log(vacations.length, page, lastPage);
+        const relevantVacations = vacationsService.getVacationsByPage(vacations, page, lastPage);
+        if (relevantVacations.length < 1) {
             navigate(`/vacations?p=${lastPage}`);
-            return arr;
+            return [];
         }
-        for (let i = 0; i < config.vacationCount; i++) {
-            if (i + (page * config.vacationCount) >= vacations.length) break;
-            arr.push(vacations[i + (page * config.vacationCount)]);
-        }
-        return arr;
+        return relevantVacations;
     }
 
     // filter out the expired vacations
@@ -144,8 +141,8 @@ function Home(): JSX.Element {
 
                 <div className="flex-container">
                     {vacations.length === 0 && <Spinner />}
-                    {vacations && <>
-                        {getVacationsByPage(vacations, page).map(v => <VacationCard vacation={v} expired={(new Date()).getTime() > v.startDate.getTime()} key={v.id} />)}
+                    {vacations.length > 0 && <>
+                        {getRelevantVacations().map(v => <VacationCard vacation={v} expired={(new Date()).getTime() > v.startDate.getTime()} key={v.id} />)}
                     </>}
                 </div>
             </div>
