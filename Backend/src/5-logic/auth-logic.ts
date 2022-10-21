@@ -17,7 +17,7 @@ async function register(user: UserModel): Promise<string> {
     // inserting the new user to the DB
     const sqlQuery = `INSERT INTO users (userID, firstName, lastName, userRole, username, password)
                       VALUES (DEFAULT, ?, ?, ?, ?, ?)`;
-    const result: OkPacket = await dal.execute(sqlQuery, user.firstName, user.lastName, userRoleId, user.username, user.password);
+    const result: OkPacket = await dal.execute(sqlQuery, user.firstName, user.lastName, userRoleId, user.username, auth.hash(user.password));
     // updating the user with the returned ID
     user.id = result.insertId;
     user.role = "User";
@@ -41,7 +41,7 @@ async function login(creds: CredentialsModel): Promise<string> {
                         FROM users AS U
                         JOIN roles AS R ON U.userRole = R.roleID
                         WHERE username = ? AND password = ?`;
-    const users = await dal.execute(sqlQuery, creds.username, creds.password);
+    const users = await dal.execute(sqlQuery, creds.username, auth.hash(creds.password));
     if (users.length < 1) throw new UnauthorizedError("Incorrect username or password");
     const user = new UserModel(users[0]);
     // augmenting the user object

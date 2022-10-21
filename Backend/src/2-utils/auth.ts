@@ -1,7 +1,15 @@
 import UserModel from "../4-models/user-model";
+import crypto from 'crypto';
 import jwt from "jsonwebtoken";
 
-const secretKey = "YellowBrickRoad";
+const secretKey = "LionsAndTigersAndBears";
+const salt = "YellowBrickRoad";
+
+
+function hash(plainText) {
+    if (!plainText) return null;
+    return crypto.createHmac("sha256", salt).update(plainText).digest("hex");
+}
 
 function generateNewToken(user: UserModel): string {
     const container = { user };
@@ -59,4 +67,4 @@ function getUserIDFromToken(authHeader: string): number {
     return user.id;
 }
 
-export default { generateNewToken, verifyToken, getUserRoleFromToken, getUserIDFromToken };
+export default { generateNewToken, verifyToken, getUserRoleFromToken, getUserIDFromToken, hash };

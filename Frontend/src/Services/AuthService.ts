@@ -3,12 +3,10 @@ import CredentialsModel from "../Models/CredentialsModel";
 import UserModel from "../Models/UserModel";
 import { AuthAction, AuthActionType, authStore } from "../Redux/AuthState";
 import config from "../Utils/config";
-import sha256 from "../Utils/hash";
 import jwtDecode from "jwt-decode";
 
 class AuthService {
     public async register(user: UserModel): Promise<void> {
-        user.password = sha256(user.password);
         const response = await axios.post<string>(`${config.authURL}/register`, user);
         // receiving token
         const token = response.data;
@@ -18,8 +16,6 @@ class AuthService {
     }
     
     public async login(cred: CredentialsModel): Promise<void> {
-        // hashing the password
-        cred.password = sha256(cred.password);
         const response = await axios.post<string>(`${config.authURL}/login`, cred);
         // receiving token
         const token = response.data;
